@@ -9,6 +9,8 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
+import android.widget.Toast;
 
 public class CoolWeatherDB {
 	
@@ -17,10 +19,7 @@ public class CoolWeatherDB {
 	 */
 	public static final String DB_NAME = "cool_weather";
 	
-	/**
-	 * 数据库版本
-	 */
-	
+	//数据库版本
 	public static final int VERSION = 1;
 	
 	private static CoolWeatherDB coolWeatherDB;
@@ -58,12 +57,13 @@ public class CoolWeatherDB {
 			db.insert("Province", null, values);
 		}
 	}
-	
+
 	/**
-	 * 从数据库拂去全国所有的省份信息
+	 * 从数据库获取全国所有的省份信息
 	 */
 	public List<Province> loadProvinces(){
 		List<Province> list = new ArrayList<Province>();
+		Log.d("!!!","asdf");
 		Cursor cursor = db
 				.query("Province", null, null, null, null, null, null);
 		if(cursor.moveToFirst()){
@@ -74,6 +74,7 @@ public class CoolWeatherDB {
 				province.setProvinceCode(cursor.getString(cursor.getColumnIndex("province_code")));
 				list.add(province);
 			}while(cursor.moveToNext());
+		
 		}
 		if(cursor != null){
 			cursor.close();
@@ -102,7 +103,8 @@ public class CoolWeatherDB {
 	
 	public List<City> loadCities(int ProvinceId){
 		List<City> list = new ArrayList<City>();
-		Cursor cursor = db.query("City", null, "Province_id=?", new String[]{String.valueOf(ProvinceId)}, null	, null, null);
+		Cursor cursor = db.query("City", null, "Province_id=?",
+				new String[]{String.valueOf(ProvinceId)}, null	, null, null);
 		if(cursor.moveToFirst()){
 			do{
 				City city = new City();
